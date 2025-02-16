@@ -14,10 +14,10 @@ export const err = <E>(error: E): Result<never, E, never> => ({
   error,
 });
 
-export const tryit = <T, E>(fn: () => T, error: E): Result<T, E> => {
+export const tryit = <T, E>(fn: () => T): Result<T> => {
   try {
     return ok(fn());
   } catch (error) {
-    return err<E>(error);
+    return err(error);
   }
 };

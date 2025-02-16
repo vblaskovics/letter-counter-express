@@ -31,8 +31,21 @@ test("should return value when everything is successful", () => {
   expect(result.cause).toBeUndefined();
 });
 
+test("should return error on unexpeted error", () => {
+  class TestError extends Error {} 
+  const testFn = (): Result<number, TestError> => {
+    return err(new TestError());
+  };
+  const result = testFn();
+
+  expect(result.value).toBeUndefined();
+  expect(result.type === "err").toBe(true);
+  expect(result.error).toBeInstanceOf(TestError);
+  expect(result.cause).toBeUndefined();
+});
+
 test("should return cause on expected error", () => {
-  const testFn: () => Result<number, "expected-error"> = () => {
+  const testFn: () => Result<number, Error, "expected-error"> = () => {
     return fail("expected-error");
   };
   const result = testFn();
@@ -43,29 +56,17 @@ test("should return cause on expected error", () => {
   expect(result.cause === "expected-error").toBe(true);
 });
 
-test("should return error on unexpeted error", () => {
-  const testFn = (): Result<number> => {
-    return err(new Error());
-  };
-  const result = testFn();
-
-  expect(result.value).toBeUndefined();
-  expect(result.type === "err").toBe(true);
-  expect(result.error).toBeInstanceOf(Error);
-  expect(result.cause).toBeUndefined();
-});
-
 test("should catch errors thrown by the wrapped function", () => {
   const testFn = () => {
     throw new Error();
   };
-  const result = tryit(() => testFn());
+  const result = tryit(testFn);
   expect(result.type === "err").toBe(true);
   expect(result.error).toBeInstanceOf(Error);
 });
 
 test("should return value if no errors thrown by the wrapped function", () => {
-  const testFn = () => {
+  const testFn = ():string => {
     return "success";
   };
   const result = tryit(() => testFn());

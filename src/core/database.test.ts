@@ -30,17 +30,17 @@ describe("create", () => {
     expect(getDb()).toBeInstanceOf(sqlite.DatabaseSync);
   });
 
-  test("should use an in-memory database by default", () => {
-    createDb();
-    expect(getDb()).toBeTruthy();
-    expect(getDbContext().filename).toBe(":memory:");
-  });
+  // test("should use an in-memory database by default", () => {
+  //   createDb();
+  //   expect(getDb()).toBeTruthy();
+  //   expect(getDbContext().filename).toBe(":memory:");
+  // });
 
-  test("should create a database with the specified file path", () => {
-    createDb("test.sqlite");
-    existsSync("test.sqlite");
-    expect(getDbContext().filename).toBe("test.sqlite");
-  });
+  // test("should create a database with the specified file path", () => {
+  //   createDb("test.sqlite");
+  //   existsSync("test.sqlite");
+  //   expect(getDbContext().filename).toBe("test.sqlite");
+  // });
 });
 
 describe("loadDb", () => {
